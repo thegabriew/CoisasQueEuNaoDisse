@@ -1,8 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 
-// importações de rotas
-
 const app = express();
 
 // Configurar CORS
