@@ -2,9 +2,9 @@ import db from '../models/index.js';
 
 const messageController = {
     create: async (req, res) => {
-        const {message,reciver} = req.body;
-        if(message){
-            try{
+        const { message, reciver } = req.body;
+        if (message) {
+            try {
                 const newMessage = await db.Messages.create({
                     message,
                     reciver
@@ -18,8 +18,8 @@ const messageController = {
         }
     },
 
-    findAll: async (req, res) =>{
-        try{
+    findAll: async (req, res) => {
+        try {
             const messages = await db.Messages.findAll();
             return res.status(200).json(messages);
         } catch (error) {
@@ -27,9 +27,9 @@ const messageController = {
         }
     },
 
-    findOne: async (req, res) =>{
-        try{
-            const {id}= req.params;
+    findOne: async (req, res) => {
+        try {
+            const { id } = req.params;
             const messages = await db.Messages.findByPk(id);
             return res.status(200).json(messages);
         } catch (error) {
@@ -37,21 +37,20 @@ const messageController = {
         }
     },
 
-    excludeMessages: async (req,res)=>{
-        try{    
-            const today = new Date();
-            const messages = await db.Messages.destroy({
+    excludeMessages: async (req, res) => {
+        try {
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+            const result = await Message.destroy({
                 where: {
-                    createdAt: {
-                        [db.Sequelize.Op.lt]: today.setDate(today.getDate() - 7)
-                    }
+                    createdAt: { lt: sevenDaysAgo }
                 }
             });
-            console.log(`Mensagens excluídas: ${messages}`);
-            return res.status(200).send();
-        }catch (error) {
-            console.log(error);
-            return res.status(500).json({ error: 'Erro excluir mensagens'});
+
+            console.log(`${result} mensagens antigas apagadas.`);
+        } catch (error) {
+            console.error("Erro ao apagar mensagens antigas:", error);
         }
     }
 }
