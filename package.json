@@ -2,12 +2,12 @@
   "name": "coisasqueeunaodisse",
   "version": "1.0.0",
   "main": "index.js",
-   "scripts": {
+  "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "client": "cd client && npm start",
+    "client": "cd frontend && npm start",
     "server": "cd server && npm start",
-    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+    "install-all": "npm install && cd frontend && npm install && cd ../server && npm install",
     "migrate": "cd server && npx sequelize-cli db:migrate && echo Migration",
     "migrate-seeds": "cd server && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all && echo Migration + seeds",
     "undo": "cd server && npx sequelize-cli db:migrate:undo:all && echo banco reiniciado"

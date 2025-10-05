@@ -42,15 +42,23 @@ const messageController = {
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-            const result = await Message.destroy({
+            const result = await db.Messages.destroy({
                 where: {
                     createdAt: { lt: sevenDaysAgo }
                 }
             });
 
             console.log(`${result} mensagens antigas apagadas.`);
+            
+            if (res) {
+                return res.status(200).json({ message: `${result} mensagens antigas apagadas.` });
+            }
         } catch (error) {
             console.error("Erro ao apagar mensagens antigas:", error);
+            
+            if (res) {
+                return res.status(500).json({ error: 'Erro ao apagar mensagens antigas', details: error.message });
+            }
         }
     }
 }
