@@ -1,5 +1,4 @@
 import app from './app.js';
-import './schedule.js';
 
 const PORT = process.env.PORT || 5001;
 

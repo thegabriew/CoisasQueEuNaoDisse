@@ -1,4 +1,5 @@
 import db from '../models/index.js';
+import { Op } from 'sequelize';   
 
 const messageController = {
     create: async (req, res) => {
@@ -37,30 +38,22 @@ const messageController = {
         }
     },
 
-    excludeMessages: async (req, res) => {
-        try {
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    excludeMessages: async () => {
+    try {
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-            const result = await db.Messages.destroy({
-                where: {
-                    createdAt: { lt: sevenDaysAgo }
-                }
-            });
+        const result = await db.Messages.destroy({
+            where: {
+                createdAt: { [Op.lt]: sevenDaysAgo }   
+            }
+        });
 
-            console.log(`${result} mensagens antigas apagadas.`);
-            
-            if (res) {
-                return res.status(200).json({ message: `${result} mensagens antigas apagadas.` });
-            }
-        } catch (error) {
-            console.error("Erro ao apagar mensagens antigas:", error);
-            
-            if (res) {
-                return res.status(500).json({ error: 'Erro ao apagar mensagens antigas', details: error.message });
-            }
-        }
+        console.log(`${result} mensagens antigas apagadas.`);
+    } catch (error) {
+        console.error("Erro ao apagar mensagens antigas:", error);
     }
+}   
 }
 
 export default messageController;
